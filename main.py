@@ -6,14 +6,18 @@ from starlette.requests import Request
 from openai import OpenAI
 import os,logging
 from dotenv import load_dotenv
+
+from InsuranceAssistant import InsuranceAssistant
+
+app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 load_dotenv()
-from InsuranceAssistant import InsuranceAssistant
+
 IA = InsuranceAssistant()
 # Load OpenAI API key from environment
 api_key = os.getenv("O_API_KEY")
 
-app = FastAPI()
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
