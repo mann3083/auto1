@@ -1,0 +1,12 @@
+uvicorn
+fastapi
+openai
+langchain-openai
+langchain
+langchain-community
+azure-ai-formrecognizer
+azure-ai-textanalytics
+azure-cognitiveservices-speech
+azure-common
+azure-core
+python-dotenv
