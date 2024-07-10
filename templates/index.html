@@ -9,9 +9,29 @@
 <body>
     <div class="container">
         <h1>Kaizen Claims</h1>
-        <button id="recordButton">Start Recording</button>
-        <button id="stopButton" disabled>Stop Recording</button>
-        <p id="transcription"></p>
+        <div id="conversation">
+            <!-- Questions and responses will be dynamically added here -->
+        </div>
+
+        <div id="audioRecording">
+            <h2>Speech Recognition</h2>
+            <p id="prompt">Click the button and start speaking when ready. Recording will stop automatically after 3 seconds of silence.</p>
+            <button id="recordButton">Start Speaking</button>
+            <p id="transcription"></p>
+        </div>
+
+        <div id="textToSpeech">
+            <h2>Text to Speech Converter</h2>
+            <form id="textToSpeechForm">
+                <label for="text">Enter Text:</label>
+                <textarea id="text" name="text" rows="4" cols="50"></textarea>
+                <br><br>
+                <button type="submit">Convert to Speech</button>
+            </form>
+            <div id="audioPlayer">
+                <!-- Audio playback will be displayed here -->
+            </div>
+        </div>
     </div>
     <script src="/static/scripts.js"></script>
 </body>
