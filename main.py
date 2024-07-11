@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
@@ -58,18 +59,23 @@ async def transcribe_audio(file: UploadFile = File(...)):
 
 @app.post("/tts/")
 async def convert_text_to_speech(request: Request, text: str = Form(...)):
+    logging.info("FAST API " + text)
     urlPath = "static/speech.mp3"
     speech_file_path = Path(urlPath)
 
     try:
-        response = IA.client.audio.speech.create(model="tts-1", voice="alloy", input=text)
+        response = IA.client.audio.speech.create(
+            model="tts-1", voice="alloy", input=text
+        )
         with open(speech_file_path, "wb") as f:
             f.write(response.content)
 
-        return templates.TemplateResponse(
-            "index.html",
-            {"request": request, "audio_url": "/static/speech.mp3", "text": text},
-        )
+        return JSONResponse(content={"audio_url": "/static/speech.mp3"})
+        
+        #return templates.TemplateResponse(
+        #    "index.html",
+        #    {"request": request, "audio_url": "/static/speech.mp3", "text": text},
+        #)
     except Exception as e:
         logging.error(f"Error during TTS: {e}")
         return templates.TemplateResponse(
