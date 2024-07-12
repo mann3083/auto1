@@ -63,8 +63,14 @@ async function playNextQuestion() {
     }
 
     currentQuestionIndex++;
+
+    // LOGIC TO RECORD USER VOICE AFTER THE QUESTION IS ASKED
+    startRecording()
+    setTimeout(() => {
+        stopRecording();
+    }, 15000); // 15 seconds timeout
+
     //Reccursively call the next function with new quetsion text/
-    
     setTimeout(playNextQuestion, 3000); // Wait 5 seconds before playing the next question
 }
 
@@ -72,3 +78,62 @@ document.getElementById('startButton').onclick = () => {
     playNextQuestion();
     document.getElementById('startButton').disabled = true;
 };
+
+
+async function startRecording() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('file', audioBlob, 'audio.webm');
+
+            try {
+                const response = await fetch('/transcribe/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                document.getElementById("transcription").innerText = data.transcription;
+
+                // After transcription, proceed to the next question
+                currentQuestionIndex++;
+                setTimeout(playNextQuestion, 5000); // Wait 5 seconds before playing the next question
+
+            } catch (error) {
+                console.error('Error during transcription:', error);
+                document.getElementById("transcription").innerText = 'Transcription failed.';
+            }
+        };
+
+        // Start recording immediately
+        mediaRecorder.start();
+        audioChunks = []; // Clear any existing audio chunks
+        timeoutID = setTimeout(() => {
+            stopRecording();
+        }, 15000); // Automatically stop recording after 15 seconds
+
+    } catch (error) {
+        console.error('Error starting recording:', error);
+    }
+}
+
+function stopRecording() {
+    if (mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+        clearTimeout(timeoutID); // Clear the timeout
+        audioChunks = []; // Reset audio chunks for the next recording
+    }
+}
