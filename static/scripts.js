@@ -1,54 +1,47 @@
 const questions = [
     "What is your name?",
     "Please provide your policy number.",
-    //"What is your date of birth?",
+    "What is your date of birth?",
     // Add more questions as needed
 ];
 
 let currentQuestionIndex = 0;
+let mediaRecorder;
+let audioChunks = [];
 
 async function fetchTTS(text) {
-   
-    //console.log(typeof(text))
     const formData = new FormData();
     formData.append('text', text);
 
     const response = await fetch('/tts/', {
         method: 'POST',
         body: formData
-        //headers: {
-        //    'Content-Type': 'application/json'
-        //},
-        //body: JSON.stringify({ text: text })
     });
 
     const responseText = await response.text();
-    console.log('Response Text:', responseText);  // Log the response text for debugging
 
     if (!response.ok) {
         throw new Error('Failed to fetch TTS audio');
     }
 
     try {
-        
-        const data = JSON.parse(responseText);  // Parse the response text as JSON
+        const data = JSON.parse(responseText);
         return data.audio_url;
-
     } catch (error) {
         console.error('Error parsing JSON:', error, 'Response Text:', responseText);
         throw new Error('Failed to parse JSON response');
     }
 }
 
-
 async function playNextQuestion() {
     if (currentQuestionIndex >= questions.length) {
-        document.getElementById('question').textContent = "Processing details..."
+        //document.getElementById('question').textContent = "Processing details...";
         return;
-    };
+    }
 
     const questionText = questions[currentQuestionIndex];
     document.getElementById('question').textContent = questionText;
+
 
     try {
         const audioUrl = await fetchTTS(questionText);
@@ -57,33 +50,21 @@ async function playNextQuestion() {
                                 Your browser does not support the audio element.
                               </audio>`;
         document.getElementById('audioPlayer').innerHTML = audioElement;
+
+        const audio = document.getElementById('audioSource').parentElement;
+        audio.onended = startRecording; // Start recording after TTS ends
+
     } catch (error) {
         console.error('Error fetching TTS audio:', error);
-        //alert('Failed to play the question audio.');
+        // Optionally handle the error, e.g., display a message to the user
     }
-
-    currentQuestionIndex++;
-
-    // LOGIC TO RECORD USER VOICE AFTER THE QUESTION IS ASKED
-    startRecording()
-    setTimeout(() => {
-        stopRecording();
-    }, 15000); // 15 seconds timeout
-
-    //Reccursively call the next function with new quetsion text/
-    setTimeout(playNextQuestion, 3000); // Wait 5 seconds before playing the next question
 }
-
-document.getElementById('startButton').onclick = () => {
-    playNextQuestion();
-    document.getElementById('startButton').disabled = true;
-};
-
 
 async function startRecording() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
 
         mediaRecorder.ondataavailable = (event) => {
             audioChunks.push(event.data);
@@ -105,10 +86,8 @@ async function startRecording() {
                 }
 
                 const data = await response.json();
-
                 document.getElementById("transcription").innerText = data.transcription;
 
-                // After transcription, proceed to the next question
                 currentQuestionIndex++;
                 setTimeout(playNextQuestion, 5000); // Wait 5 seconds before playing the next question
 
@@ -118,22 +97,21 @@ async function startRecording() {
             }
         };
 
-        // Start recording immediately
         mediaRecorder.start();
-        audioChunks = []; // Clear any existing audio chunks
-        timeoutID = setTimeout(() => {
-            stopRecording();
-        }, 15000); // Automatically stop recording after 15 seconds
+
+        // Automatically stop recording after 15 seconds or if silence is detected
+        setTimeout(() => {
+            if (mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+        }, 7000);
 
     } catch (error) {
         console.error('Error starting recording:', error);
     }
 }
 
-function stopRecording() {
-    if (mediaRecorder.state !== 'inactive') {
-        mediaRecorder.stop();
-        clearTimeout(timeoutID); // Clear the timeout
-        audioChunks = []; // Reset audio chunks for the next recording
-    }
-}
+document.getElementById('startButton').onclick = () => {
+    playNextQuestion();
+    document.getElementById('startButton').disabled = true;
+};
