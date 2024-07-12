@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
@@ -18,6 +19,7 @@ IA = InsuranceAssistant()
 # Load OpenAI API key from environment
 api_key = os.getenv("O_API_KEY")
 
+LANGUAGE = 'en' # 'ja'
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -30,7 +32,7 @@ async def get(request: Request):
 
 @app.post("/transcribe/")
 async def transcribe_audio(file: UploadFile = File(...)):
-
+    #logging.info(f"STT {transcription.text}")
     try:
 
         receivedAudio = await file.read()
@@ -40,36 +42,44 @@ async def transcribe_audio(file: UploadFile = File(...)):
         # Call OpenAI Whisper model
         transcription = IA.client.audio.transcriptions.create(
             model="whisper-1",
-            language="ja",
+            language=LANGUAGE,
             temperature=0.1,
             file=open("audio/utterance.webm", "rb"),
             response_format="json",
         )
-        logging.info(transcription.text)
         rawText = transcription.text
+        logging.info(f"TRANSCRIBED RAW text is {rawText}")
+        
         ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
-        japPII = IA.extract_PII_Japanese_Text(rawText)
-        logging.info(japPII)
-        return {"transcription": str(japPII)}
+        if LANGUAGE == 'ja':
+            japPII = IA.extract_PII_Japanese_Text_JP(rawText)
+        else:
+            japPII = IA.extract_PII_Japanese_Text_EN(rawText)
+            
+        logging.info(f"EXTRACTED text is {japPII}")
+
+        return JSONResponse(content={"transcription": str(japPII)})
 
     except Exception as e:
-        return {"Error": str(e)}
+        return JSONResponse(content={"Error": str(e)}, status_code=500)
 
 
 @app.post("/tts/")
 async def convert_text_to_speech(request: Request, text: str = Form(...)):
+    logging.info("TTS " + text)
     urlPath = "static/speech.mp3"
     speech_file_path = Path(urlPath)
 
     try:
-        response = IA.client.audio.speech.create(model="tts-1", voice="alloy", input=text)
+        response = IA.client.audio.speech.create(
+            model="tts-1", voice="alloy", input=text
+        )
         with open(speech_file_path, "wb") as f:
             f.write(response.content)
 
-        return templates.TemplateResponse(
-            "index.html",
-            {"request": request, "audio_url": "/static/speech.mp3", "text": text},
-        )
+        return JSONResponse(content={"audio_url": "/static/speech.mp3"})
+        
+
     except Exception as e:
         logging.error(f"Error during TTS: {e}")
         return templates.TemplateResponse(

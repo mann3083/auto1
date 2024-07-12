@@ -1,38 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Transcription</title>
+    <title>Real Time Key Phrase Extraction</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
+
 <body>
     <div class="container">
-        <h1>Kaizen Claims</h1>
-        <div id="conversation">
-            <!-- Questions and responses will be dynamically added here -->
-        </div>
-
-        <div id="audioRecording">
-            <h2>Speech Recognition</h2>
-            <p id="prompt">Click the button and start speaking when ready. Recording will stop automatically after 3 seconds of silence.</p>
-            <button id="recordButton">Start Speaking</button>
-            <p id="transcription"></p>
-        </div>
-
-        <div id="textToSpeech">
-            <h2>Text to Speech Converter</h2>
-            <form id="textToSpeechForm">
-                <label for="text">Enter Text:</label>
-                <textarea id="text" name="text" rows="4" cols="50"></textarea>
-                <br><br>
-                <button type="submit">Convert to Speech</button>
-            </form>
-            <div id="audioPlayer">
-                <!-- Audio playback will be displayed here -->
-            </div>
-        </div>
+        <h1>Agent Copilot</h1>
+        <button id="startButton">Kaizen Claims - Agent CoPilot</button>
+        <p id="question"></p>
+        <div id="audioPlayer"></div>
+        <p id="transcription"></p>
+        <p id="recordingStatus"></p>
     </div>
     <script src="/static/scripts.js"></script>
 </body>
+
 </html>
