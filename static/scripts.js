@@ -1,7 +1,7 @@
 const questions = [
     "What is your name?",
     "Please provide your policy number.",
-    "What is your date of birth?",
+    "What is your date of birth?",//document.getElementById("dob").value='2023-01-01'
     // Add more questions as needed
 ];
 
@@ -87,6 +87,26 @@ async function startRecording() {
 
                 const data = await response.json();
                 document.getElementById("transcription").innerText = data.transcription;
+                
+                //NAME
+                let policyName = document.getElementById('name');
+                if (policyName === '') {
+                    policyName.value=data.transcription
+                }
+
+                //POLICY NUMBER
+                let policyNumberInput = document.getElementById('policyNumber');
+                if (policyNumberInput === '') {
+                    policyNumberInput.value=data.transcription
+                }
+
+                //DOB
+
+                let policyDOB = document.getElementById('dob');
+                if (policyDOB === '') {
+                    policyDOB.value=data.transcription
+                }
+                
 
                 currentQuestionIndex++;
                 setTimeout(playNextQuestion, 5000); // Wait 5 seconds before playing the next question
@@ -104,7 +124,7 @@ async function startRecording() {
             if (mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
             }
-        }, 7000);
+        }, 5000);
 
     } catch (error) {
         console.error('Error starting recording:', error);

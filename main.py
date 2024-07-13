@@ -55,7 +55,11 @@ async def transcribe_audio(file: UploadFile = File(...)):
             japPII = IA.extract_PII_Japanese_Text_JP(rawText)
         else:
             japPII = IA.extract_PII_Japanese_Text_EN(rawText)
-            
+            #"Extracted_Value: "2011-06-07"
+            if "Extracted_Value:" in japPII:
+                japPII = japPII.split(":")[1]
+        
+        
         logging.info(f"EXTRACTED text is {japPII}")
 
         return JSONResponse(content={"transcription": str(japPII)})

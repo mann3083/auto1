@@ -40,8 +40,49 @@ p {
 }
 
 /* New styles using the third MetLife color */
-.container h1,
+.container h1,h2,
 .container button:hover {
     color: #A4CE4E; /* MetLife green */
 }
 
+
+
+
+
+#informationForm {
+    display: block;
+    text-align: left;
+    color: #009EDD; /* MetLife teal */
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+label {
+    text-align: right;
+    color: #A4CE4E;
+}
+input {
+    text-align: left;
+    color: #015b7f 
+}
+
+header, footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+    left: 0;
+    z-index: 1000; /* Ensure header is above other content */
+}
+header nav a, footer nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+}
+header nav a:hover, footer nav a:hover {
+    text-decoration: underline;
+}

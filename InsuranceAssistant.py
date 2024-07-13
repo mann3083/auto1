@@ -212,21 +212,50 @@ class InsuranceAssistant:
 
         try:
             prompt_and_context = [
-                # ("human", "{query}."),
+
                 (
                     "system",
-                    """You are an expert data entry operator in English. 
-                Extract PII data such as name or date or birth or policy number 
-                or address from the given sentence. 
-                You must only return response in key valye pair - 
-                like name:extractedName,
-                date_of_birth:extracted_date_of_birth. 
-                If there is no PII information return null only return
-                key that has a value - dont make mistake. #### Context:{context}. 
-                
-                These are PII information accuracy is very importantreturned value
-                must be in english think step 
-                by step""",
+                    """You are an expert data entry operator in English.
+                    Given a sentence extract the context from it - say
+                data or key information such as name or date or birth or policy number 
+                or address or email or nature of illness. 
+                You must extract and return only the value from the sentence.
+
+                Example:
+                Sentence: "My name is Albert Pinto Jr"
+                Extracted_Value: "Albert Pinto Jr"
+
+                Sentence: "Captain Jack Sparrow"
+                Extracted_Value: "Captain Jack Sparrow"
+
+                Sentence: "My date of birth 2nd June 2024"
+                Extracted_Value: "2024-06-02"
+
+                Extracted_Value: Sentence: "3rd July 2009"
+                Extracted_Value: "2009-07-03"
+
+                Sentence: "My email is ab2@gmail.com"
+                Extracted_Value: "ab2@gmail.com"
+
+                Sentence: "My policy number is 989898"
+                Extracted_Value: "989898"
+
+                Sentence: "989898"
+                "989898"
+
+                Sentence: "I dont remeber let me recheck"
+                Extracted_Value: "null"
+
+                Sentence: "Cataract Surgery happended on the left eye"
+                Extracted_Value: "Cataract Surgery"
+
+                #### Sentence:
+                {context}
+
+                For the date of birth feild the returned value must be in YYYY-MM-DD format.
+                Accuracy is very important,returned value must be in english. 
+                The response is only one value and not the whole sentence or paragraph.
+                Think step by step""",
                 ),
             ]
             chat = ChatOpenAI(model="gpt-4o", api_key=self.O_API_KEY, temperature=0.1)
