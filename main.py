@@ -32,7 +32,7 @@ async def get(request: Request):
 
 @app.post("/transcribe/")
 async def transcribe_audio(file: UploadFile = File(...)):
-    #logging.info(f"STT {transcription.text}")
+
     try:
 
         receivedAudio = await file.read()
@@ -54,17 +54,19 @@ async def transcribe_audio(file: UploadFile = File(...)):
         if LANGUAGE == 'ja':
             japPII = IA.extract_PII_Japanese_Text_JP(rawText)
         else:
-            japPII = IA.extract_PII_Japanese_Text_EN(rawText)
+            japPII = IA.extract_PII_Japanese_Text_ENG(rawText)
             #"Extracted_Value: "2011-06-07"
-            if "Extracted_Value:" in japPII:
-                japPII = japPII.split(":")[1]
         
+        #if ":" in japPII:
+        #    japPII_Simple = japPII.split(":")[1]
+
         
         logging.info(f"EXTRACTED text is {japPII}")
 
         return JSONResponse(content={"transcription": str(japPII)})
 
     except Exception as e:
+        logging.info(f"ERROR {str(e)}")
         return JSONResponse(content={"Error": str(e)}, status_code=500)
 
 

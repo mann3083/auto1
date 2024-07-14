@@ -87,26 +87,26 @@ async function startRecording() {
 
                 const data = await response.json();
                 document.getElementById("transcription").innerText = data.transcription;
-                
+                extractedVale = data.transcription
+                extractedVale = extractedVale.replace(/^"(.*)"$/, '$1').trim()
                 //NAME
-                let policyName = document.getElementById('name');
-                if (policyName === '') {
-                    policyName.value=data.transcription
+                
+                if (document.getElementById('name').value === '') {
+                    document.getElementById('name').value = extractedVale
+                    extractedVale = ''
                 }
 
                 //POLICY NUMBER
-                let policyNumberInput = document.getElementById('policyNumber');
-                if (policyNumberInput === '') {
-                    policyNumberInput.value=data.transcription
+                if (document.getElementById('policyNumber').value === '') {
+                    document.getElementById('policyNumber').value = extractedVale
+                    extractedVale = ''
                 }
 
                 //DOB
-
-                let policyDOB = document.getElementById('dob');
-                if (policyDOB === '') {
-                    policyDOB.value=data.transcription
+                if (document.getElementById('dob').value === '') {
+                    document.getElementById('dob').value = extractedVale
+                    extractedVale = ''
                 }
-                
 
                 currentQuestionIndex++;
                 setTimeout(playNextQuestion, 5000); // Wait 5 seconds before playing the next question
