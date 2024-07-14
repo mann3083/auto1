@@ -19,7 +19,7 @@ IA = InsuranceAssistant()
 # Load OpenAI API key from environment
 api_key = os.getenv("O_API_KEY")
 
-LANGUAGE = 'ja' # 'ja'/'en'
+LANGUAGE = os.getenv("LANGUAGE") #'ja' # 'ja'/'en'
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -28,6 +28,8 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/", response_class=HTMLResponse)
 async def get(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+
 
 
 @app.post("/transcribe/")
@@ -52,7 +54,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         
         ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
         if LANGUAGE == 'ja':
-            japPII = IA.extract_PII_Japanese_Text_COMMON(rawText)
+            japPII = IA.extract_PII_Japanese_Text_JAP(rawText)
         else:
             japPII = IA.extract_PII_Japanese_Text_ENG(rawText)
             #"Extracted_Value: "2011-06-07"
