@@ -40,9 +40,13 @@ p {
 }
 
 /* New styles using the third MetLife color */
-.container h1,h2,
+
+body > div > h1 {
+    color: #009EDD; /* MetLife teal */
+}
+.container h2,
 .container button:hover {
-    color: #A4CE4E; /* MetLife green */
+    color: #A4CE4E; /* MetLife teal */
 }
 
 

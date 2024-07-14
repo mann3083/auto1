@@ -19,7 +19,7 @@ IA = InsuranceAssistant()
 # Load OpenAI API key from environment
 api_key = os.getenv("O_API_KEY")
 
-LANGUAGE = 'en' # 'ja'
+LANGUAGE = 'ja' # 'ja'/'en'
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -52,7 +52,7 @@ async def transcribe_audio(file: UploadFile = File(...)):
         
         ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
         if LANGUAGE == 'ja':
-            japPII = IA.extract_PII_Japanese_Text_JP(rawText)
+            japPII = IA.extract_PII_Japanese_Text_COMMON(rawText)
         else:
             japPII = IA.extract_PII_Japanese_Text_ENG(rawText)
             #"Extracted_Value: "2011-06-07"
@@ -78,7 +78,7 @@ async def convert_text_to_speech(request: Request, text: str = Form(...)):
 
     try:
         response = IA.client.audio.speech.create(
-            model="tts-1", voice="alloy", input=text
+            model="tts-1", voice="nova", input=text
         )
         with open(speech_file_path, "wb") as f:
             f.write(response.content)

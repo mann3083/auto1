@@ -1,8 +1,17 @@
 const questions = [
-    "What is your name?",
-    "Please provide your policy number.",
-    "What is your date of birth?",//document.getElementById("dob").value='2023-01-01'
-    // Add more questions as needed
+    "What is the name of the insured person",
+    "Please provide your policy number",
+    "What is the date of birth of the insured person",
+    "What is the name of disease or injury",
+    "What is the date of injury",
+];
+
+const qJapan = [
+    "被保険者の名前は何ですか",
+    "保険証券番号を入力してください",
+    "被保険者の生年月日はいつですか",
+    "病気や怪我の名前は何ですか",
+    "怪我をした日はいつですか"
 ];
 
 let currentQuestionIndex = 0;
@@ -107,9 +116,20 @@ async function startRecording() {
                     document.getElementById('dob').value = extractedVale
                     extractedVale = ''
                 }
+                //NAME OF INJURY
+                if (document.getElementById('nameInjury').value === '') {
+                    document.getElementById('nameInjury').value = extractedVale
+                    extractedVale = ''
+                }
+
+                //DATE OF INJURY
+                if (document.getElementById('dateInjury').value === '') {
+                    document.getElementById('dateInjury').value = extractedVale
+                    extractedVale = ''
+                }
 
                 currentQuestionIndex++;
-                setTimeout(playNextQuestion, 5000); // Wait 5 seconds before playing the next question
+                setTimeout(playNextQuestion, 3000); // Wait 5 seconds before playing the next question
 
             } catch (error) {
                 console.error('Error during transcription:', error);

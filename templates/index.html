@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Time Key Phrase Extraction</title>
+    <title>Autobots</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 
@@ -15,10 +15,15 @@
             <a href="#">About</a>
             <a href="#">Services</a>
             <a href="#">Contact</a>
+            Real-Time Data Extraction for Claims
+            Instant Claim Form Automation
+            Voice-Activated Claim Filing
+            Live Speech-to-Form Processing
+            Automated Real-Time Claim Submission
         </nav>
     </header-->
     <div class="container">
-        <h1>Real Time Key Phrase Extraction</h1>
+        <h1>Automated Real-Time Claim Filing</h1>
         <button id="startButton">Start CoPilot</button>
         <p id="question"></p>
         <div id="audioPlayer"></div>
@@ -26,24 +31,27 @@
         <p id="recordingStatus"></p>
         <br>
         <br>
-        <br>
-        <br>
         <h2>Claim Form</h2>
+        <div class="container">
         <form id="informationForm">
-            <label for="name">What is your name?</label>
+            <label for="name">Insured Person Name         </label>
             <input type="text" id="name" name="name" required>
             <br>
-            <label for="policyNumber">Please provide your policy number.</label>
+            <label for="policyNumber">Insured Person Policy Number</label>
             <input type="text" id="policyNumber" name="policyNumber" required>
             <br>
-            <label for="dob">What is your date of birth?</label>
-            <input type="date" id="dob" name="dob" required>
+            <label for="dob">Insured Person date of birth</label>
+            <input type="text" id="dob" name="dob" required>
             <br>
-            <label for="email">Your Email Address:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="nameInjury">Name of disease or injury   </label>
+            <input type="text" id="nameInjury" name="nameInjury" required>
             <br>
-            <button type="submit">Send</button>
+            <label for="dateInjury">Date of disease or injury   </label>
+            <input type="text" id="dateInjury" name="dateInjury" required>
+            <br>
+            <!--button type="submit">Send</button-->
         </form>
+    </div>
     </div>
     <!--footer>
         <nav>

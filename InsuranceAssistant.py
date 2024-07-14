@@ -184,58 +184,6 @@ class InsuranceAssistant:
         except Exception as err:
             print(f"Encountered exception. {err}")
 
-    def extract_PII_Japanese_Text_JP(self, japText):
-        prompt_and_context = [
-            # ("human", "{query}."),
-            (
-                "system",
-                """You are an expert data entry operator in Japanese. 
-             Extract PII data such as name or date or birth or policy number 
-             or address from the given sentence. 
-             You must only return response in 
-             key valye pair - like {{name:extractedName}},
-             {{date_of_birth:extracted_date_of_birth}}. 
-             If there is no PII information return {{null}} only return
-             key that has a value - dont make mistake. #### Context:{context}. 
-             
-            These are PII information accuracy is very important think step 
-            by step""",
-            ),
-        ]
-        chat = ChatOpenAI(model="gpt-4o", api_key=self.O_API_KEY, temperature=0.1)
-        chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
-        message = chat_template.format_messages(context=japText)
-        ai_resp = chat.invoke(message)
-        return ai_resp.content
-
-    def extract_PII_Japanese_Text_EN(self, japText):
-
-        try:
-            prompt_and_context = [
-                (
-                    "system",
-                    """You are an expert data entry operator in English.
-                    Given a sentence extract the key user information from it - such as 
-                name or date or birth or policy number 
-                or address or email or nature of illness. 
-                You must extract and return only the value from the sentence.
-
-                #### Sentence:
-                {context}
-
-                For the date of birth feild the returned value must be in YYYY-MM-DD format.
-                Accuracy is very important,returned value must be in english. 
-                The response is only one value and not the whole sentence or paragraph.
-                Think step by step""",
-                ),
-            ]
-            chat = ChatOpenAI(model="gpt-4o", api_key=self.O_API_KEY, temperature=0.1)
-            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
-            message = chat_template.format_messages(context=japText)
-            ai_resp = chat.invoke(message)
-            return ai_resp.content
-        except Exception as e:
-            return str(e)
 
 
     def extract_PII_Japanese_Text_ENG(self, japText):
@@ -307,36 +255,142 @@ class InsuranceAssistant:
             return str(e)
 
 
-    def extract_PII_Japanese_Text(self, japText, LANG):
 
-        if LANG == "en":
-            LANG = "english"
-        elif LANG == "ja":
-            LANG = "japanese"
-        else:
-            LANG = "english"
+    def extract_PII_Japanese_Text_JP(self, japText):
 
-        prompt_and_context = [
-            # ("human", "{query}."),
-            (
-                "system",
-                """You are an expert data entry operator in {LANG}. 
-                Extract PII data such as name or date or birth or policy number 
-                or address from the given sentence. 
-                You must only return response in
-                key valye pair - like name:extractedName,
-                date_of_birth:extracted_date_of_birth. 
-                If there is no PII information return null only return
-                key that has a value - dont make mistake. #### Context:{context}. 
-                
-                These are PII information accuracy is very important,returned value
-                must be in {LANG} think step by step""",
-            ),
-        ]
-        chat = ChatOpenAI(
-            model="gpt-3.5-turbo-0125", api_key=self.O_API_KEY, temperature=0.1
-        )
-        chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
-        message = chat_template.format_messages(context=japText, LANG=LANG)
-        ai_resp = chat.invoke(message)
-        return ai_resp.content
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """あなたは専門的なデータ抽出アシスタントです。あなたのタスクは、名前、保険番号、生年月日、メールアドレスなどの重要な情報を与えられた文章から正確に抽出することです。ユーザーは文章全体を話しますが、あなたは抽出された値のみを返す必要があります。
+
+                    抽出は以下のルールに従って行ってください：
+                    1. **名前の抽出**：
+                    - 文章: "私の名前はアルバート・ピント・ジュニアです"
+                    - 抽出された値: "アルバート・ピント・ジュニア"
+                    - 文章: "キャプテン・ジャック・スパロウ"
+                    - 抽出された値: "キャプテン・ジャック・スパロウ"
+
+                    2. **生年月日の抽出**：
+                    - 文章: "私の生年月日は2024年6月2日です"
+                    - 抽出された値: "2024-06-02"
+                    - 文章: "2009年7月3日"
+                    - 抽出された値: "2009-07-03"
+
+                    3. **メールアドレスの抽出**：
+                    - 文章: "私のメールアドレスはab2@gmail.comです"
+                    - 抽出された値: "ab2@gmail.com"
+
+                    4. **保険番号の抽出**：
+                    - 文章: "私の保険番号は989898です"
+                    - 抽出された値: "989898"
+                    - 文章: "989898"
+                    - 抽出された値: "989898"
+
+                    5. **nullの抽出**：
+                    - 文章: "覚えていません。確認させてください"
+                    - 抽出された値: "null"
+
+                    6. **医療手続きの抽出**：
+                    - 文章: "左目に白内障手術をしました"
+                    - 抽出された値: "白内障手術"
+
+                    上記のルールに従って、抽出された値が正確であることを確認してください。文章にキー情報が含まれていない場合は、「null」と返してください。
+
+                    例：
+
+                    1. 文章: "私の名前はアルバート・ピント・ジュニアです"
+                    抽出された値: "アルバート・ピント・ジュニア"
+
+                    2. 文章: "私のメールアドレスはab2@gmail.comです"
+                    抽出された値: "ab2@gmail.com"
+
+                    3. 文章: "2009年7月3日"
+                    抽出された値: "2009-07-03"
+
+                    4. 文章: "覚えていません。確認させてください"
+                    抽出された値: "null"
+
+                    こちらが処理する文章です：
+                    文章: "{context}"
+                    抽出された値:""",
+                ),
+            ]
+            chat = ChatOpenAI(model="gpt-4o", api_key=self.O_API_KEY, temperature=0.1)
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+        except Exception as e:
+            return str(e)
+
+
+
+    def extract_PII_Japanese_Text_JAP(self, japText):
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """You are an expert data extraction assistant. Your task is to accurately extract key information such as name, policy number, date of birth, email, etc., from given sentences. The user will speak the entire sentence, and you must only return the extracted value. 
+
+                    The extraction should follow these rules:
+
+                    **Japanese Instructions**:
+                    1. **名前の抽出**:
+                    - 文: "私の名前はアルバート・ピント・ジュニアです"
+                    - 抽出された値: "アルバート・ピント・ジュニア"
+                    - 文: "キャプテン・ジャック・スパロウ"
+                    - 抽出された値: "キャプテン・ジャック・スパロウ"
+
+                    2. **生年月日の抽出**:
+                    - 文: "私の生年月日は2024年6月2日です"
+                    - 抽出された値: "2024-06-02"
+                    - 文: "2009年7月3日"
+                    - 抽出された値: "2009-07-03"
+
+                    3. **メールアドレスの抽出**:
+                    - 文: "私のメールアドレスはab2@gmail.comです"
+                    - 抽出された値: "ab2@gmail.com"
+
+                    4. **ポリシー番号の抽出**:
+                    - 文: "私のポリシー番号は989898です"
+                    - 抽出された値: "989898"
+                    - 文: "989898"
+                    - 抽出された値: "989898"
+
+                    5. **nullの抽出**:
+                    - 文: "思い出せません、再確認させてください"
+                    - 抽出された値: "null"
+
+                    6. **医療手続きの抽出**:
+                    - 文: "左目で白内障手術が行われました"
+                    - 抽出された値: "白内障手術"
+
+                    これらのルールに従い、抽出された値が正確であることを確認してください。文に重要な情報が含まれていない場合は、「null」を返してください。
+
+                    Examples:
+
+                    1. 文: "私の名前はアルバート・ピント・ジュニアです"
+                    抽出された値: "アルバート・ピント・ジュニア"
+
+                    2. 文: "私のメールアドレスはab2@gmail.comです"
+                    抽出された値: "ab2@gmail.com"
+
+                    3. 文: "2009年7月3日"
+                    抽出された値: "2009-07-03"
+
+                    4. 文: "思い出せません、再確認させてください"
+                    抽出された値: "null"
+
+                    Here is the sentence to process:
+                    Sentence: "{context}"
+                    Extracted_Value: """,
+                ),
+            ]
+            chat = ChatOpenAI(model="gpt-4", api_key=self.O_API_KEY, temperature=0.1)
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+        except Exception as e:
+            return str(e)
