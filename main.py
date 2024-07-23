@@ -53,10 +53,13 @@ async def transcribe_audio(file: UploadFile = File(...)):
         logging.info(f"TRANSCRIBED RAW text is {rawText}")
         
         ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
-        if LANGUAGE == 'ja':
+        if LANGUAGE == 'jp':
             japPII = IA.extract_PII_Japanese_Text_JAP(rawText)
+            
+            
         else:
-            japPII = IA.extract_PII_Japanese_Text_ENG(rawText)
+            #japPII = IA.extract_PII_Japanese_Text_ENG(rawText)
+            japPII = IA.extraction_Prompt_ENG(rawText)
             #"Extracted_Value: "2011-06-07"
         
         #if ":" in japPII:

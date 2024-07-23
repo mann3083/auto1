@@ -254,7 +254,74 @@ class InsuranceAssistant:
         except Exception as e:
             return str(e)
 
+    def extraction_Prompt_ENG(self, japText):
 
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """You are an expert data extraction assistant. Your task is to accurately extract key information such as name, policy number, date of birth, email, etc., from given sentences. The user will speak the entire sentence, and you must only return the extracted value. 
+
+                The extraction should follow these rules:
+                1. **Name Extraction**:
+                - Sentence: "My name is Albert Pinto Jr"
+                - "Albert Pinto Jr"
+                - Sentence: "Captain Jack Sparrow"
+                - "Captain Jack Sparrow"
+
+                2. **Date of Birth Extraction**:
+                - Sentence: "My date of birth 2nd June 2024"
+                - "2024-06-02"
+                - Sentence: "3rd July 2009"
+                - "2009-07-03"
+
+                3. **Email Extraction**:
+                - Sentence: "My email is ab2@gmail.com"
+                - "ab2@gmail.com"
+
+                4. **Policy Number Extraction**:
+                - Sentence: "My policy number is 989898"
+                - "989898"
+                - Sentence: "989898"
+                - "989898"
+
+                5. **Null Extraction**:
+                - Sentence: "I don't remember, let me recheck"
+                - "null"
+
+                6. **Medical Procedure Extraction**:
+                - Sentence: "Cataract Surgery happened on the left eye"
+                - "Cataract Surgery"
+
+                Please follow the above rules and ensure the extracted values are accurate. If the sentence does not contain any of the key information, return "null".
+
+                Examples:
+
+                1. Sentence: "My name is Albert Pinto Jr"
+                "Albert Pinto Jr"
+
+                2. Sentence: "My email is ab2@gmail.com"
+                "ab2@gmail.com"
+
+                3. Sentence: "3rd July 2009"
+                Extracted_Value: "2009-07-03"
+
+                4. Sentence: "I don't remember, let me recheck"
+                "null"
+
+                Here is the sentence to process:
+                Sentence: "{context}"
+                """,
+                ),
+            ]
+            chat = ChatOpenAI(model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0.1)
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+
+        except Exception as e:
+            return str(e)
 
     def extract_PII_Japanese_Text_JP(self, japText):
 
