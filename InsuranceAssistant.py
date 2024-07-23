@@ -246,7 +246,7 @@ class InsuranceAssistant:
                 Extracted_Value:""",
                 ),
             ]
-            chat = ChatOpenAI(model="gpt-4o", api_key=self.O_API_KEY, temperature=0.1)
+            chat = ChatOpenAI(model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0.1)
             chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
             message = chat_template.format_messages(context=japText)
             ai_resp = chat.invoke(message)
@@ -316,14 +316,13 @@ class InsuranceAssistant:
                     抽出された値:""",
                 ),
             ]
-            chat = ChatOpenAI(model="gpt-4o", api_key=self.O_API_KEY, temperature=0.1)
+            chat = ChatOpenAI(model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0.1)
             chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
             message = chat_template.format_messages(context=japText)
             ai_resp = chat.invoke(message)
             return ai_resp.content
         except Exception as e:
             return str(e)
-
 
 
     def extract_PII_Japanese_Text_JAP(self, japText):
