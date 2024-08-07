@@ -197,49 +197,49 @@ class InsuranceAssistant:
                 The extraction should follow these rules:
                 1. **Name Extraction**:
                 - Sentence: "My name is Albert Pinto Jr"
-                - Extracted_Value: "Albert Pinto Jr"
+                "Albert Pinto Jr"
                 - Sentence: "Captain Jack Sparrow"
-                - Extracted_Value: "Captain Jack Sparrow"
+                "Captain Jack Sparrow"
 
                 2. **Date of Birth Extraction**:
                 - Sentence: "My date of birth 2nd June 2024"
-                - Extracted_Value: "2024-06-02"
+                "2024-06-02"
                 - Sentence: "3rd July 2009"
-                - Extracted_Value: "2009-07-03"
+                "2009-07-03"
 
                 3. **Email Extraction**:
                 - Sentence: "My email is ab2@gmail.com"
-                - Extracted_Value: "ab2@gmail.com"
+                "ab2@gmail.com"
 
                 4. **Policy Number Extraction**:
                 - Sentence: "My policy number is 989898"
-                - Extracted_Value: "989898"
+                "989898"
                 - Sentence: "989898"
-                - Extracted_Value: "989898"
+                "989898"
 
                 5. **Null Extraction**:
                 - Sentence: "I don't remember, let me recheck"
-                - Extracted_Value: "null"
+                "null"
 
                 6. **Medical Procedure Extraction**:
                 - Sentence: "Cataract Surgery happened on the left eye"
-                - Extracted_Value: "Cataract Surgery"
+                "Cataract Surgery"
 
                 Please follow the above rules and ensure the extracted values are accurate. If the sentence does not contain any of the key information, return "null".
 
                 Examples:
 
                 1. Sentence: "My name is Albert Pinto Jr"
-                Extracted_Value: "Albert Pinto Jr"
+                "Albert Pinto Jr"
 
                 2. Sentence: "My email is ab2@gmail.com"
-                Extracted_Value: "ab2@gmail.com"
+                "ab2@gmail.com"
 
                 3. Sentence: "3rd July 2009"
-                Extracted_Value: "2009-07-03"
+                "2009-07-03"
 
                 4. Sentence: "I don't remember, let me recheck"
-                Extracted_Value: "null"
+                "null"
 
                 Here is the sentence to process:
                 Sentence: "{context}"
@@ -322,6 +322,245 @@ class InsuranceAssistant:
 
         except Exception as e:
             return str(e)
+        
+    def extraction_Prompt_ENG_II(self, japText):
+
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """You are an expert data extraction assistant. Your task is to accurately extract key information such as name, policy number, date of birth, email, etc., from given sentences. The user will speak the entire sentence, and you must only return the extracted value. 
+
+                    The extraction should follow these rules:
+                    
+                    1. **Name Extraction**:
+                    - Sentence: "My name is Albert Pinto Jr"
+                    "Albert Pinto Jr"
+                    - Sentence: "Captain Jack Sparrow"
+                    "Captain Jack Sparrow"
+                    - Sentence: "I am called Jane Doe"
+                    "Jane Doe"
+                    - Sentence: "My full name is Dr. Meredith Grey"
+                    "Dr. Meredith Grey"
+
+                    2. **Date of Birth Extraction**:
+                    - Sentence: "My date of birth is 2nd June 2024"
+                    "2024-06-02"
+                    - Sentence: "3rd July 2009"
+                    "2009-07-03"
+                    - Sentence: "I was born on 15th August 1990"
+                    "1990-08-15"
+                    - Sentence: "Her birthdate is December 25, 1985"
+                    "1985-12-25"
+
+                    3. **Email Extraction**:
+                    - Sentence: "My email is ab2@gmail.com"
+                    "ab2@gmail.com"
+                    - Sentence: "Contact me at john_doe123@outlook.com"
+                    "john_doe123@outlook.com"
+                    - Sentence: "My email address is jane.smith@example.com"
+                    "jane.smith@example.com"
+                    - Sentence: "Send the details to mike@domain.co"
+                    "mike@domain.co"
+
+                    4. **Policy Number Extraction**:
+                    - Sentence: "My policy number is 989898"
+                    "989898"
+                    - Sentence: "989898"
+                    "989898"
+                    - Sentence: "Policy ID: 123456789"
+                    "123456789"
+                    - Sentence: "Please note my policy number is AB1234567"
+                    "AB1234567"
+
+                    5. **Null Extraction**:
+                    - Sentence: "I don't remember, let me recheck"
+                    "null"
+                    - Sentence: "Could you repeat that?"
+                    "null"
+                    - Sentence: "I will have to look it up later"
+                    "null"
+                    - Sentence: "Sorry, I forgot to mention it"
+                    "null"
+
+                    6. **Medical Procedure Extraction**:
+                    - Sentence: "Cataract Surgery happened on the left eye"
+                    "Cataract Surgery"
+                    - Sentence: "She had a knee replacement surgery"
+                    "knee replacement surgery"
+                    - Sentence: "Underwent heart bypass operation"
+                    "heart bypass operation"
+                    - Sentence: "He had a tonsillectomy last year"
+                    "tonsillectomy"
+
+                    Please follow the above rules and ensure the extracted values are accurate. If the sentence does not contain any of the key information, return "null".
+
+                    Examples:
+
+                    1. Sentence: "My name is Albert Pinto Jr"
+                    Extracted_Value: "Albert Pinto Jr"
+
+                    2. Sentence: "My email is ab2@gmail.com"
+                    Extracted_Value: "ab2@gmail.com"
+
+                    3. Sentence: "3rd July 2009"
+                    Extracted_Value: "2009-07-03"
+
+                    4. Sentence: "I don't remember, let me recheck"
+                    Extracted_Value: "null"
+
+                    5. Sentence: "The procedure was cataract surgery on both eyes"
+                    Extracted_Value: "cataract surgery"
+
+                    6. Sentence: "My policy number is XYZ789456"
+                    Extracted_Value: "XYZ789456"
+
+                    7. Sentence: "You can reach me at james.bond007@mi6.co.uk"
+                    Extracted_Value: "james.bond007@mi6.co.uk"
+
+                    8. Sentence: "I was born on 11th November 1995"
+                    Extracted_Value: "1995-11-11"
+
+                    9. Sentence: "My name is Tony Stark"
+                    Extracted_Value: "Tony Stark"
+
+                    10. Sentence: "I don't have that information right now"
+                    Extracted_Value: "null"
+
+                    Here is the sentence to process:
+                    Sentence: "{context}"
+                    """,
+                ),
+            ]
+            chat = ChatOpenAI(model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0.1)
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+
+        except Exception as e:
+            return str(e)
+
+    def extraction_Prompt_JP_II(self, japText):
+
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """あなたは専門のデータ抽出アシスタントです。名前、保険証番号、生年月日、メールアドレスなどの重要な情報を、与えられた文から正確に抽出することがあなたの任務です。ユーザーは文全体を話し、あなたは抽出された値のみを返す必要があります。
+
+                    抽出は以下のルールに従って行う必要があります：
+
+                    1. **名前の抽出**:
+                    - 文: "私の名前はアルバート・ピント・ジュニアです"
+                    - "アルバート・ピント・ジュニア"
+                    - 文: "キャプテン・ジャック・スパロウ"
+                    - "キャプテン・ジャック・スパロウ"
+                    - 文: "私はジェーン・ドゥと呼ばれています"
+                    - "ジェーン・ドゥ"
+                    - 文: "私のフルネームはドクター・メレディス・グレイです"
+                    - "ドクター・メレディス・グレイ"
+
+                    2. **生年月日の抽出**:
+                    - 文: "私の生年月日は2024年6月2日です"
+                    - "2024-06-02"
+                    - 文: "2009年7月3日"
+                    - "2009-07-03"
+                    - 文: "私は1990年8月15日に生まれました"
+                    - "1990-08-15"
+                    - 文: "彼女の誕生日は1985年12月25日です"
+                    - "1985-12-25"
+
+                    3. **メールアドレスの抽出**:
+                    - 文: "私のメールは ab2@gmail.com です"
+                    - "ab2@gmail.com"
+                    - 文: "john_doe123@outlook.com に連絡してください"
+                    - "john_doe123@outlook.com"
+                    - 文: "私のメールアドレスは jane.smith@example.com です"
+                    - "jane.smith@example.com"
+                    - 文: "mike@domain.co に詳細を送ってください"
+                    - "mike@domain.co"
+
+                    4. **保険証番号の抽出**:
+                    - 文: "私の保険証番号は 989898 です"
+                    - "989898"
+                    - 文: "989898"
+                    - "989898"
+                    - 文: "保険ID: 123456789"
+                    - "123456789"
+                    - 文: "私の保険証番号は AB1234567 です"
+                    - "AB1234567"
+
+                    5. **Null の抽出**:
+                    - 文: "思い出せません、確認してみます"
+                    - "null"
+                    - 文: "もう一度言ってください"
+                    - "null"
+                    - 文: "後で調べます"
+                    - "null"
+                    - 文: "すみません、言い忘れました"
+                    - "null"
+
+                    6. **医療手続きの抽出**:
+                    - 文: "左目の白内障手術を受けました"
+                    - "白内障手術"
+                    - 文: "彼女は膝の置換手術を受けました"
+                    - "膝の置換手術"
+                    - 文: "心臓バイパス手術を受けました"
+                    - "心臓バイパス手術"
+                    - 文: "彼は昨年扁桃摘出手術を受けました"
+                    - "扁桃摘出手術"
+
+                    上記のルールに従い、抽出された値が正確であることを確認してください。文に重要な情報が含まれていない場合は、「null」を返してください。
+
+                    例:
+
+                    1. 文: "私の名前はアルバート・ピント・ジュニアです"
+                    "アルバート・ピント・ジュニア"
+
+                    2. 文: "私のメールは ab2@gmail.com です"
+                    "ab2@gmail.com"
+
+                    3. 文: "2009年7月3日"
+                    "2009-07-03"
+
+                    4. 文: "思い出せません、確認してみます"
+                    "null"
+
+                    5. 文: "両目の白内障手術を受けました"
+                    "白内障手術"
+
+                    6. 文: "私の保険証番号は XYZ789456 です"
+                    "XYZ789456"
+
+                    7. 文: "james.bond007@mi6.co.uk に連絡してください"
+                    "james.bond007@mi6.co.uk"
+
+                    8. 文: "私は1995年11月11日に生まれました"
+                    "1995-11-11"
+
+                    9. 文: "私の名前はトニー・スタークです"
+                    "トニー・スターク"
+
+                    10. 文: "その情報は今持っていません"
+                    "null"
+
+                    以下の文を処理してください:
+                    文: "{context}"
+                    """,
+                ),
+
+            ]
+            chat = ChatOpenAI(model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0.1)
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+
+        except Exception as e:
+            return str(e)
+
+
 
     def extract_PII_Japanese_Text_JP(self, japText):
 
