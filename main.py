@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 from openai import OpenAI
-import os, logging
+import os, logging,json
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -30,9 +30,7 @@ async def get(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-
-
-@app.post("/transcribe/")
+""" @app.post("/transcribe/")
 async def transcribe_audio(file: UploadFile = File(...)):
 
     try:
@@ -72,6 +70,53 @@ async def transcribe_audio(file: UploadFile = File(...)):
 
     except Exception as e:
         logging.info(f"ERROR {str(e)}")
+        return JSONResponse(content={"Error": str(e)}, status_code=500) """
+
+@app.post("/transcribe/")
+async def transcribe_audio(file: UploadFile = File(...),text: str = Form(...)):
+    
+    try:
+        #json_dict = json.loads(json_data)
+        #logging.info(f"WORKING"+text)
+        
+        receivedAudio = await file.read()
+        with open("audio/utterance.webm", "wb") as f:
+            f.write(receivedAudio)
+
+        # Call OpenAI Whisper model
+        transcription = IA.client.audio.transcriptions.create(
+            model="whisper-1",
+            language=LANGUAGE,
+            temperature=0.1,
+            file=open("audio/utterance.webm", "rb"),
+            response_format="json",
+        )
+        rawText = transcription.text
+        #logging.info(f"QUESTION ASKED WAS {key}")
+        logging.info(f"TRANSCRIBED RAW text is {rawText}")
+
+        
+        ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
+        if LANGUAGE == 'jp':
+            japPII = IA.extraction_Prompt_JP_II(rawText)
+            
+            
+        else:
+            if "medical concern" in text:
+                logging.info(f"INTENT EXTRACTION PART")
+                japPII = IA.extraction_Intent_ENG(rawText)
+            else:
+                japPII = IA.extraction_KYC_ENG(rawText)
+
+        
+
+        
+        logging.info(f"EXTRACTED text is {japPII}")
+
+        return JSONResponse(content={"transcription": str(japPII)})
+
+    except Exception as e:
+        logging.info(f"ERROR {str(e)}")
         return JSONResponse(content={"Error": str(e)}, status_code=500)
 
 
@@ -96,3 +141,4 @@ async def convert_text_to_speech(request: Request, text: str = Form(...)):
         return templates.TemplateResponse(
             "index.html", {"request": request, "error": str(e)}
         )
+    

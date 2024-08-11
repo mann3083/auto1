@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #333;
     color: #333;
     margin: 0;
     padding: 0;
@@ -72,7 +72,10 @@ input {
     text-align: left;
     color: #015b7f 
 }
-
+textarea {
+    text-align: left;
+    color: #015b7f 
+}
 header, footer {
     background-color: #333;
     color: white;

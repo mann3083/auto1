@@ -9,21 +9,9 @@
 </head>
 
 <body>
-    <!--header>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Contact</a>
-            Real-Time Data Extraction for Claims
-            Instant Claim Form Automation
-            Voice-Activated Claim Filing
-            Live Speech-to-Form Processing
-            Automated Real-Time Claim Submission
-        </nav>
-    </header-->
+
     <div class="container">
-        <h1>Automated Real-Time Claim Filing</h1>
+        <h1>Autobots Real-Time Claim Filing</h1>
         <button id="startButton">Start CoPilot</button>
         <p id="question"></p>
         <div id="audioPlayer"></div>
@@ -34,22 +22,29 @@
         <h2>Claim Form</h2>
         <div class="container">
         <form id="informationForm">
-            <label for="name">Insured Person Name         </label>
-            <input type="text" id="name" name="name" required>
-            <br>
-            <label for="policyNumber">Insured Person Policy Number</label>
-            <input type="text" id="policyNumber" name="policyNumber" required>
-            <br>
-            <label for="dob">Insured Person date of birth</label>
-            <input type="text" id="dob" name="dob" required>
-            <br>
-            <label for="nameInjury">Name of disease or injury   </label>
-            <input type="text" id="nameInjury" name="nameInjury" required>
-            <br>
-            <label for="dateInjury">Date of disease or injury   </label>
-            <input type="text" id="dateInjury" name="dateInjury" required>
-            <br>
-            <!--button type="submit">Send</button-->
+            
+            <table>
+                <tr>
+                    <td><label for="name">Insured Person Name</label></td>
+                    <td><input type="text" id="name" name="name" required></td>
+                </tr>
+                <tr>
+                    <td><label for="policyNumber">Insured Person Policy Number</label></td>
+                    <td><input type="text" id="policyNumber" name="policyNumber" required></td>
+                </tr>
+                <tr>
+                    <td><label for="dob">Insured Person Date of Birth</label></td>
+                    <td><input type="text" id="dob" name="dob" required></td>
+                </tr>
+                <tr>
+                    <td><label for="nameInjury">Name of Disease or Injury</label></td>
+                    <td><textarea id="nameInjury" name="nameInjury" required rows="2" cols="50"></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="dateInjury">Date of Disease or Injury</label></td>
+                    <td><input type="text" id="dateInjury" name="dateInjury" required></td>
+                </tr>
+            </table>
         </form>
     </div>
     </div>

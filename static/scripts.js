@@ -2,7 +2,7 @@ const questions = [
     "What is the name of the insured person",
     "Please provide your policy number",
     "What is the date of birth of the insured person",
-    "What is the name of disease or injury",
+    "Please let me know the medical concern",
     "What is the date of injury",
 ];
 
@@ -61,7 +61,8 @@ async function playNextQuestion() {
         document.getElementById('audioPlayer').innerHTML = audioElement;
 
         const audio = document.getElementById('audioSource').parentElement;
-        audio.onended = startRecording; // Start recording after TTS ends
+        //audio.onended = startRecording; // Start recording after TTS ends
+        audio.onended = startRecording(questionText); // Start recording after TTS ends
 
     } catch (error) {
         console.error('Error fetching TTS audio:', error);
@@ -69,7 +70,7 @@ async function playNextQuestion() {
     }
 }
 
-async function startRecording() {
+async function startRecording(questionText) {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         mediaRecorder = new MediaRecorder(stream);
@@ -83,6 +84,9 @@ async function startRecording() {
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
             const formData = new FormData();
             formData.append('file', audioBlob, 'audio.webm');
+
+            //PASS THE QUESTION TYPE
+            formData.append('text', questionText)
 
             try {
                 const response = await fetch('/transcribe/', {
@@ -129,7 +133,7 @@ async function startRecording() {
                 }
 
                 currentQuestionIndex++;
-                setTimeout(playNextQuestion, 3000); // Wait 5 seconds before playing the next question
+                setTimeout(playNextQuestion, 8000); // Wait 5 seconds before playing the next question
 
             } catch (error) {
                 console.error('Error during transcription:', error);
@@ -144,7 +148,7 @@ async function startRecording() {
             if (mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
             }
-        }, 5000);
+        }, 8000);
 
     } catch (error) {
         console.error('Error starting recording:', error);
