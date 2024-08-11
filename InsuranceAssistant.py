@@ -115,9 +115,9 @@ class InsuranceAssistant:
                     The extraction should follow these rules:
                     
                     1. **Name Extraction**:
-                    - Sentence: 'Albert Pinto Jr'
+                    - Sentence: 'hmm!.... Albert Pinto Jr'
                     "Albert Pinto Jr"
-                    - Sentence: 'Albus Dumbledore'
+                    - Sentence: 'hmm!.... Albus Dumbledore'
                     "Albus Dumbledore"
                     - Sentence: "My name is Albert Pinto Jr"
                     "Albert Pinto Jr"
@@ -131,6 +131,8 @@ class InsuranceAssistant:
                     2. **Date Extraction**:
                     - Sentence: "My date of birth is 2nd June 2024"
                     "2024-06-02"
+                    - Sentence: "err...let me check....hmm! its 2nd August 1983"
+                    "1983-08-02"
                     - Sentence: "3rd July 2009"
                     "2009-07-03"
                     - Sentence: "I was born on 15th August 1990"
