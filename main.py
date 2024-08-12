@@ -83,7 +83,7 @@ async def transcribe_audio(file: UploadFile = File(...),text: str = Form(...)):
 
 @app.post("/tts/")
 async def convert_text_to_speech(request: Request, text: str = Form(...)):
-    logging.info("TTS " + text)
+    logging.info("CHECK TTS " + text)
     urlPath = "static/speech.mp3"
     speech_file_path = Path(urlPath)
 
