@@ -148,7 +148,7 @@ async function startRecording(questionText) {
             if (mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
             }
-        }, 10000);
+        }, 7000);
 
     } catch (error) {
         console.error('Error starting recording:', error);

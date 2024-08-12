@@ -30,48 +30,6 @@ async def get(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-""" @app.post("/transcribe/")
-async def transcribe_audio(file: UploadFile = File(...)):
-
-    try:
-
-        receivedAudio = await file.read()
-        with open("audio/utterance.webm", "wb") as f:
-            f.write(receivedAudio)
-
-        # Call OpenAI Whisper model
-        transcription = IA.client.audio.transcriptions.create(
-            model="whisper-1",
-            language=LANGUAGE,
-            temperature=0.1,
-            file=open("audio/utterance.webm", "rb"),
-            response_format="json",
-        )
-        rawText = transcription.text
-        logging.info(f"TRANSCRIBED RAW text is {rawText}")
-        
-        ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
-        if LANGUAGE == 'jp':
-            japPII = IA.extraction_Prompt_JP_II(rawText)
-            
-            
-        else:
-            #japPII = IA.extract_PII_Japanese_Text_ENG(rawText)
-            japPII = IA.extraction_Prompt_ENG_II(rawText)
-            #"Extracted_Value: "2011-06-07"
-        
-        #if ":" in japPII:
-        #    japPII_Simple = japPII.split(":")[1]
-
-        
-        logging.info(f"EXTRACTED text is {japPII}")
-
-        return JSONResponse(content={"transcription": str(japPII)})
-
-    except Exception as e:
-        logging.info(f"ERROR {str(e)}")
-        return JSONResponse(content={"Error": str(e)}, status_code=500) """
-
 @app.post("/transcribe/")
 async def transcribe_audio(file: UploadFile = File(...),text: str = Form(...)):
     
@@ -93,12 +51,15 @@ async def transcribe_audio(file: UploadFile = File(...),text: str = Form(...)):
         )
         rawText = transcription.text
         #logging.info(f"QUESTION ASKED WAS {key}")
-        logging.info(f"TRANSCRIBED RAW text is {rawText}")
 
         
         ## CALL THE EXTRACT KEY VAL CONCEPT TO EXTRACT DETAILS
-        if LANGUAGE == 'jp':
-            japPII = IA.extraction_Prompt_JP_II(rawText)
+        if LANGUAGE == 'ja':
+            if "medical concern" in text:
+                logging.info(f"INTENT EXTRACTION PART")
+                japPII = IA.extraction_Intent_JP(rawText)
+            else:
+                japPII = IA.extraction_KYC_JP(rawText)
             
             
         else:

@@ -217,5 +217,110 @@ class InsuranceAssistant:
         except Exception as e:
             return str(e)
 
+    def extraction_KYC_JP(self, japText):
 
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """あなたはエキスパートの抽出アルゴリズムであり、抽出された値のみを返す必要があります。確信が持てない場合はnullを返してください。.
+
+                    抽出は次のルールに従う必要があります：
+
+                    1. **名前の抽出**:
+                    文: 'うーん！.... アルバート・ピント・ジュニア'
+                    "アルバート・ピント・ジュニア"
+                    文: 'うーん！.... アルバス・ダンブルドア'
+                    "アルバス・ダンブルドア"
+                    文: "私の名前はアルバート・ピント・ジュニアです"
+                    "アルバート・ピント・ジュニア"
+                    文: "キャプテン・ジャック・スパロウ"
+                    "キャプテン・ジャック・スパロウ"
+                    文: "私はジェーン・ドウと呼ばれています"
+                    "ジェーン・ドウ"
+                    文: "私のフルネームはドクター・メレディス・グレイです"
+                    "ドクター・メレディス・グレイ"
+
+                    1. 文: "私の生年月日は2024年6月2日です"
+                    - "2024-06-02"
+                    2. 文: "えーっと...確認させてください....うーん！1983年8月2日です"
+                    - "1983-08-02"
+                    3. 文: "2009年7月3日"
+                    - "2009-07-03"
+                    4. 文: "私は1990年8月15日に生まれました"
+                    - "1990-08-15"
+                    5. 文: "彼女の誕生日は1985年12月25日です"
+                    - "1985-12-25"
+                    6. 文: "12月25日"
+                    - "XXXX-12-25"
+                    7. 文: "誕生日は5月6日です"
+                    - "XXXX-05-06"
+
+                    文: "私のポリシー番号は989898です"
+                    "989898"
+                    文: "989898"
+                    "989898"
+                    文: "ポリシーID: 123456789"
+                    "123456789"
+                    文: "私のポリシー番号はAB1234567ですのでご確認ください"
+                    "AB1234567"
+
+                    上記のルールに従い、抽出された値が正確であることを確認してください
+
+                    ここに処理する文があります:
+                    文: "{context}"
+                    """,
+                ),
+            ]
+            chat = ChatOpenAI(
+                model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0
+            )
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+
+        except Exception as e:
+            return str(e)
+        
+
+
+
+    def extraction_Intent_JP(self, japText):
+
+        try:
+            prompt_and_context = [
+                (
+                    "system",
+                    """あなたは評判の良い病院で働く医療アシスタントで、患者の懸念を要約することを専門としています。あなたの任務は、患者の説明を正確に特定し、適切な医療用語に翻訳することです。
+
+                        例:
+
+                            発信者: "最近、気分がとても落ち込んでいて、以前好きだったことに興味が持てなくなっています。"
+                            "大うつ病性障害"
+
+                            発信者: "腕全体に赤くてかゆい変な発疹があります。"
+                            "接触皮膚炎"
+
+                            発信者: "パンを食べると、時々お腹がとても痛くなります。"
+                            "グルテン不耐症（セリアック病）"
+
+                            発信者: "どこで水を手に入れられますか？"
+                            "null"
+
+                            それでは、次の発信者の説明を適切に処理してください。
+                            発信者: "{context}"
+                    """,
+                ),
+            ]
+            chat = ChatOpenAI(
+                model="gpt-4o-mini", api_key=self.O_API_KEY, temperature=0
+            )
+            chat_template = ChatPromptTemplate.from_messages(prompt_and_context)
+            message = chat_template.format_messages(context=japText)
+            ai_resp = chat.invoke(message)
+            return ai_resp.content
+
+        except Exception as e:
+            return str(e)
 
