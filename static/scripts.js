@@ -133,7 +133,7 @@ async function startRecording(questionText) {
                 }
 
                 currentQuestionIndex++;
-                setTimeout(playNextQuestion, 9000); // Wait 5 seconds before playing the next question
+                setTimeout(playNextQuestion, 5000); // Wait 5 seconds before playing the next question
 
             } catch (error) {
                 console.error('Error during transcription:', error);
@@ -145,10 +145,10 @@ async function startRecording(questionText) {
 
         // Automatically stop recording after 15 seconds or if silence is detected
         setTimeout(() => {
-            if (mediaRecorder.state !== 'inactive') {
+            //if (mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop();
-            }
-        }, 7000);
+            //}
+        }, 10000);
 
     } catch (error) {
         console.error('Error starting recording:', error);
