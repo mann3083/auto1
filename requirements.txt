@@ -10,3 +10,4 @@ azure-cognitiveservices-speech
 azure-common
 azure-core
 python-dotenv
+python-multipart
